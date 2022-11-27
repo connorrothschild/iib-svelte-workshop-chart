@@ -5,7 +5,7 @@
   export let fill;
   export let hoveredDate;
 
-  $: dataAfterHover = data.filter((d) => new Date(d.date) >= hoveredDate);
+  $: dataAfterHover = data.filter((d) => new Date(d.date) > hoveredDate);
   $: dataBeforeHover = data.filter((d) => new Date(d.date) <= hoveredDate);
 
   import { line } from "d3-shape";

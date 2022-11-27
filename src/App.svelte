@@ -5,7 +5,7 @@
   let width = 400;
   const height = 400;
 
-  const margin = { top: 30, right: 30, bottom: 30, left: 30 };
+  const margin = { top: 20, right: 50, bottom: 30, left: 30 };
 
   $: innerWidth = width - margin.right - margin.left;
   const innerHeight = height - margin.top - margin.bottom;
@@ -80,5 +80,13 @@
   :global(.axis text) {
     fill: #999;
     font-size: 0.8rem;
+  }
+
+  .chart-container {
+    background: rgb(240, 240, 240);
+  }
+
+  svg {
+    cursor: crosshair;
   }
 </style>
