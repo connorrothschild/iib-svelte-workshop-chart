@@ -6,8 +6,8 @@
   export let BIDEN_COLOR;
   export let TRUMP_COLOR;
 
-  $: getYValue = data =>
-    Math.round(data.filter(d => new Date(d.date) >= hoveredDate)[0]?.winprob);
+  $: getYValue = (data) =>
+    Math.round(data.filter((d) => new Date(d.date) >= hoveredDate)[0]?.winprob);
 </script>
 
 <text
@@ -16,7 +16,7 @@
   dx="6"
   fill={TRUMP_COLOR}
 >
-{getYValue(data.Trump)} in 100
+  {getYValue(data.Trump)} in 100
 </text>
 
 <text
@@ -25,7 +25,7 @@
   dx="6"
   fill={BIDEN_COLOR}
 >
-{getYValue(data.Biden)} in 100
+  {getYValue(data.Biden)} in 100
 </text>
 
 <style>

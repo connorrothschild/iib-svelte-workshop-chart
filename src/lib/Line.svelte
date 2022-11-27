@@ -5,25 +5,17 @@
   export let fill;
   export let hoveredDate;
 
-  $: dataAfterHover = data.filter(d => new Date(d.date) >= hoveredDate);
-  $: dataBeforeHover = data.filter(d => new Date(d.date) <= hoveredDate);
-  $: console.log(dataAfterHover.length);
+  $: dataAfterHover = data.filter((d) => new Date(d.date) >= hoveredDate);
+  $: dataBeforeHover = data.filter((d) => new Date(d.date) <= hoveredDate);
 
   import { line } from "d3-shape";
   $: lineGenerator = line()
-    .x(d => xScale(new Date(d.date)))
-    .y(d => yScale(d.winprob));
+    .x((d) => xScale(new Date(d.date)))
+    .y((d) => yScale(d.winprob));
 </script>
 
-<path 
-  d={lineGenerator(dataAfterHover)}
-  stroke={fill}
-  opacity=".5"
-/>
-<path 
-  d={lineGenerator(dataBeforeHover)}
-  stroke={fill}
-/>
+<path d={lineGenerator(dataAfterHover)} stroke={fill} opacity=".5" />
+<path d={lineGenerator(dataBeforeHover)} stroke={fill} />
 
 <style>
   path {

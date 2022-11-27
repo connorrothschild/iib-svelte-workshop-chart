@@ -5,23 +5,19 @@
   export let margin;
   export let hoveredDate;
 
-  const handleMousemove = function(e) {
+  const handleMousemove = function (e) {
     hoveredDate = xScale.invert(e.offsetX - margin.left);
   };
 </script>
 
-<rect 
-  width={width}
-  height={height}
-  fill='transparent'
-  on:mousemove={handleMousemove} 
-/>
+<rect {width} {height} fill="transparent" on:mousemove={handleMousemove} />
 
-<line 
+<line
   x1={0}
   x2={0}
   y1={0}
   y2={height}
-  stroke='black'
+  stroke="black"
   transform="translate({xScale(hoveredDate)} 0)"
+  stroke-dasharray="2, 2"
 />
