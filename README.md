@@ -1,19 +1,18 @@
-# Svelte for Data Visualization | Starter Template
+# IIB Workshop: Svelte + D3
 
-This is a simple template for creating data visualizations with Svelte. It was primarily created for my /newline course, "[Better Data Visualizations with Svelte](https://www.newline.co/courses/better-data-visualizations-with-svelte/welcome)."
-
-It uses [Svelte](https://svelte.dev/) and [D3](https://d3js.org/). The D3 modules most commonly used in data visualization are already installed.
-
-It also includes a simple CSS reset, as existing Svelte templates sometimes have styles that break data visualizations. There is little else added, the template is meant to be barebones.
+This is a recreation of a dual line chart found in FiveThirtyEight's [2020 Election Forecast](https://projects.fivethirtyeight.com/2020-election-forecast/).
 
 ## Getting started
 
 ### 1. Clone the template
 
-You can clone this template in one of two ways:
+In your terminal, run the following command:
 
-1. Click the green "Use this template" button on GitHub
-2. On the command line, run `npx degit connorrothschild/svelte-visualization-template`
+```bash
+git clone connorrothschild/svelte-d3-iib-workshop
+```
+
+Then, `cd` into that directory.
 
 ### 2. Install dependencies
 
