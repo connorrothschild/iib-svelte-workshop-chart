@@ -1,5 +1,5 @@
 <script>
-  import data from "./data/lines.json";
+  import data from "./data/data.json";
   console.log(data);
 
   let width = 400;
@@ -11,13 +11,11 @@
   const innerHeight = height - margin.top - margin.bottom;
 
   import { scaleTime, scaleLinear } from "d3-scale";
-  const yScale = scaleLinear()
-    .domain([0, 100])
-    .range([innerHeight, 0]);
+  const yScale = scaleLinear().domain([0, 100]).range([innerHeight, 0]);
 
   import { extent } from "d3-array";
   $: xScale = scaleTime()
-    .domain(extent(data.Trump.map(d => new Date(d.date))))
+    .domain(extent(data.Trump.map((d) => new Date(d.date))))
     .range([0, innerWidth]);
 
   import Line from "./lib/Line.svelte";
@@ -33,41 +31,49 @@
   let hoveredDate = new Date(data.Trump[data.Trump.length - 1].date);
 </script>
 
-<div class='chart-container' bind:clientWidth={width}>
-<svg width={width} height={height}>
-  <g class='inner-chart' transform="translate({margin.left}, {margin.top})">
-    <!-- Axes -->
-    <AxisX height={innerHeight} {xScale} />
-    <AxisY width={innerWidth} {yScale} />
+<div class="chart-container" bind:clientWidth={width}>
+  <svg {width} {height}>
+    <g class="inner-chart" transform="translate({margin.left}, {margin.top})">
+      <!-- Axes -->
+      <AxisX height={innerHeight} {xScale} />
+      <AxisY width={innerWidth} {yScale} />
 
-    <!-- Lines -->
-    <Line 
-      data={data.Trump} 
-      {xScale} 
-      {yScale} 
-      fill={TRUMP_COLOR} 
-      {hoveredDate}
-    />
-    <Line 
-      data={data.Biden} 
-      {xScale} 
-      {yScale} 
-      fill={BIDEN_COLOR}
-      {hoveredDate} />
+      <!-- Lines -->
+      <Line
+        data={data.Trump}
+        {xScale}
+        {yScale}
+        fill={TRUMP_COLOR}
+        {hoveredDate}
+      />
+      <Line
+        data={data.Biden}
+        {xScale}
+        {yScale}
+        fill={BIDEN_COLOR}
+        {hoveredDate}
+      />
 
-    <!-- Hover Listeners -->
-    <HoverListeners 
-      width={innerWidth} 
-      height={innerHeight} 
-      {xScale} 
-      {margin}
-      bind:hoveredDate 
-    />
+      <!-- Hover Listeners -->
+      <HoverListeners
+        width={innerWidth}
+        height={innerHeight}
+        {xScale}
+        {margin}
+        bind:hoveredDate
+      />
 
-    <!-- Tooltip -->
-    <Tooltip {data} {hoveredDate} {xScale} {yScale} {BIDEN_COLOR} {TRUMP_COLOR} />
-  </g>
-</svg>
+      <!-- Tooltip -->
+      <Tooltip
+        {data}
+        {hoveredDate}
+        {xScale}
+        {yScale}
+        {BIDEN_COLOR}
+        {TRUMP_COLOR}
+      />
+    </g>
+  </svg>
 </div>
 
 <style>
