@@ -1,80 +1,78 @@
 <script>
-  import data from "./data/raw.json";
-
+  import data from "./data/lines.json";
   console.log(data);
 
   let width = 400;
-  let height = 400;
+  const height = 400;
+
+  const margin = { top: 30, right: 30, bottom: 30, left: 30 };
+
+  $: innerWidth = width - margin.right - margin.left;
+  const innerHeight = height - margin.top - margin.bottom;
 
   import { scaleTime, scaleLinear } from "d3-scale";
+  const yScale = scaleLinear()
+    .domain([0, 100])
+    .range([innerHeight, 0]);
+
   import { extent } from "d3-array";
-
-  const margin = { top: 50, right: 50, bottom: 50, left: 50 };
-  $: boundedWidth = width - margin.right - margin.left;
-  let boundedHeight = height - margin.top - margin.bottom;
-
-  let yScale = scaleLinear().domain([0, 100]).range([boundedHeight, 0]);
-
   $: xScale = scaleTime()
-    .domain(extent(data.Trump, (d) => new Date(d.date)))
-    .range([0, boundedWidth]);
+    .domain(extent(data.Trump.map(d => new Date(d.date))))
+    .range([0, innerWidth]);
 
   import Line from "./lib/Line.svelte";
-  import HoverListeners from "./lib/HoverListeners.svelte";
 
-  const TRUMP_COLOR = "#fa5a50";
   const BIDEN_COLOR = "#5768ac";
+  const TRUMP_COLOR = "#fa5a50";
 
   import AxisX from "./lib/AxisX.svelte";
   import AxisY from "./lib/AxisY.svelte";
+  import Tooltip from "./lib/Tooltip.svelte";
+  import HoverListeners from "./lib/HoverListeners.svelte";
 
-  let hoveredIndex = data.Biden.length - 1;
+  let hoveredDate = new Date(data.Trump[data.Trump.length - 1].date);
 </script>
 
-<div class="chart-container" bind:offsetWidth={width}>
-  <svg {width} {height}>
-    <g class="inner-chart" transform="translate({margin.left} {margin.top})">
-      <AxisX {xScale} {boundedHeight} />
-      <AxisY {yScale} {boundedWidth} />
-      <Line
-        data={data.Trump}
-        stroke={TRUMP_COLOR}
-        {xScale}
-        {yScale}
-        {hoveredIndex}
-      />
-      <Line
-        data={data.Biden}
-        stroke={BIDEN_COLOR}
-        {xScale}
-        {yScale}
-        {hoveredIndex}
-      />
-      <HoverListeners
-        {data}
-        {xScale}
-        {yScale}
-        width={boundedWidth}
-        height={boundedHeight}
-        {TRUMP_COLOR}
-        {BIDEN_COLOR}
-        bind:hoveredIndex
-      />
-    </g>
-  </svg>
+<div class='chart-container' bind:clientWidth={width}>
+<svg width={width} height={height}>
+  <g class='inner-chart' transform="translate({margin.left}, {margin.top})">
+    <!-- Axes -->
+    <AxisX height={innerHeight} {xScale} />
+    <AxisY width={innerWidth} {yScale} />
+
+    <!-- Lines -->
+    <Line 
+      data={data.Trump} 
+      {xScale} 
+      {yScale} 
+      fill={TRUMP_COLOR} 
+      {hoveredDate}
+    />
+    <Line 
+      data={data.Biden} 
+      {xScale} 
+      {yScale} 
+      fill={BIDEN_COLOR}
+      {hoveredDate} />
+
+    <!-- Hover Listeners -->
+    <HoverListeners 
+      width={innerWidth} 
+      height={innerHeight} 
+      {xScale} 
+      {margin}
+      bind:hoveredDate 
+    />
+
+    <!-- Tooltip -->
+    <Tooltip {data} {hoveredDate} {xScale} {yScale} {BIDEN_COLOR} {TRUMP_COLOR} />
+  </g>
+</svg>
 </div>
 
 <style>
-  /* This is where CSS lives */
-  svg {
-    cursor: crosshair;
-  }
-
   :global(.axis text) {
     fill: #999;
-  }
-
-  .chart-container {
-    background: #f0f0f0;
+    font-size: 0.8rem;
   }
 </style>

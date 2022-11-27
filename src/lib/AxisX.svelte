@@ -1,30 +1,29 @@
 <script>
-  export let boundedHeight;
+  export let height;
   export let xScale;
 
-  let xTicks = xScale.ticks(5);
-
-  const TICK_LENGTH = 10;
+  const xTicks = xScale.ticks(5);
 
   import { timeFormat } from "d3-time-format";
   const dateFormat = timeFormat("%b %d");
 </script>
 
-<g class="axis x">
+<g class='axis x' transform="translate(0 {height})">
   {#each xTicks as tick}
-    <line
-      x1={xScale(tick)}
+    <line 
+      x1={xScale(tick)} 
       x2={xScale(tick)}
-      y1={boundedHeight}
-      y2={boundedHeight + TICK_LENGTH}
-      stroke="#999"
+      y1='0' 
+      y2='6' 
+      stroke='#999'
     />
-    <text
-      x={xScale(tick)}
-      y={boundedHeight + TICK_LENGTH}
-      dy="8"
-      dominant-baseline="hanging"
-      text-anchor="middle">{dateFormat(tick)}</text
-    >
+    <text 
+      x={xScale(tick)} 
+      y='6' 
+      dy="3"
+      text-anchor='middle'
+      dominant-baseline="hanging">
+      {dateFormat(tick)}
+    </text>
   {/each}
 </g>
