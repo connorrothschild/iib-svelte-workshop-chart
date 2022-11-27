@@ -9,7 +9,7 @@ This is a recreation of a dual line chart found in FiveThirtyEight's [2020 Elect
 In your terminal, run the following command:
 
 ```bash
-git clone connorrothschild/svelte-d3-iib-workshop
+git clone https://github.com/connorrothschild/svelte-d3-iib-workshop.git
 ```
 
 Then, `cd` into that directory.
