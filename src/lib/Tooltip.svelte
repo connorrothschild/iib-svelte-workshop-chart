@@ -16,7 +16,9 @@
   dx="6"
   fill={TRUMP_COLOR}
 >
-  {getYValue(data.Trump)} in 100
+  {getYValue(data.Trump)}
+  <tspan dy="1.1em" x={xScale(hoveredDate)} dx="8">in</tspan>
+  <tspan dy="1.1em" x={xScale(hoveredDate)} dx="8">100</tspan>
 </text>
 
 <text
@@ -25,7 +27,9 @@
   dx="6"
   fill={BIDEN_COLOR}
 >
-  {getYValue(data.Biden)} in 100
+  {getYValue(data.Biden)}
+  <tspan dy="1.1em" x={xScale(hoveredDate)} dx="8">in</tspan>
+  <tspan dy="1.1em" x={xScale(hoveredDate)} dx="8">100</tspan>
 </text>
 
 <style>
