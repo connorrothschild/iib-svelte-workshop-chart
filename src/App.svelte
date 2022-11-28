@@ -5,7 +5,7 @@
   let width = 400;
   const height = 400;
 
-  const margin = { top: 20, right: 50, bottom: 30, left: 30 };
+  const margin = { top: 30, right: 50, bottom: 35, left: 50 };
 
   $: innerWidth = width - margin.right - margin.left;
   const innerHeight = height - margin.top - margin.bottom;
@@ -31,11 +31,12 @@
   let hoveredDate = new Date(data.Trump[data.Trump.length - 1].date);
 </script>
 
+<!-- FIXME: Add aria-labelledby, title, etc. -->
 <div class="chart-container" bind:clientWidth={width}>
   <svg {width} {height}>
     <g class="inner-chart" transform="translate({margin.left}, {margin.top})">
       <!-- Axes -->
-      <AxisX height={innerHeight} {xScale} />
+      <AxisX height={innerHeight} {xScale} {hoveredDate} />
       <AxisY width={innerWidth} {yScale} />
 
       <!-- Lines -->

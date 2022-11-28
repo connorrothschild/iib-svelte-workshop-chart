@@ -1,8 +1,12 @@
 <script>
   export let height;
   export let xScale;
+  export let hoveredDate;
 
-  const xTicks = xScale.ticks(5);
+  $: xTicks =
+    xScale.domain()[1].getTime() == hoveredDate.getTime()
+      ? xScale.ticks(5)
+      : [hoveredDate];
 
   import { timeFormat } from "d3-time-format";
   const dateFormat = timeFormat("%b %d");
@@ -14,7 +18,7 @@
     <text
       x={xScale(tick)}
       y="6"
-      dy="3"
+      dy="6"
       text-anchor="middle"
       dominant-baseline="hanging"
     >
@@ -22,3 +26,9 @@
     </text>
   {/each}
 </g>
+
+<style>
+  text {
+    text-transform: uppercase;
+  }
+</style>

@@ -5,12 +5,38 @@
   export let margin;
   export let hoveredDate;
 
-  const handleMousemove = function (e) {
+  let handleMousemove = function (e) {
     hoveredDate = xScale.invert(e.offsetX - margin.left);
   };
+
+  let handleMouseleave = function () {
+    hoveredDate = new Date(xScale.domain()[1]);
+  };
+
+  import { timeDay } from "d3-time";
+  $: focusableTicks = xScale.ticks(timeDay.every(1));
 </script>
 
-<rect {width} {height} fill="transparent" on:mousemove={handleMousemove} />
+<rect
+  {width}
+  {height}
+  fill="transparent"
+  on:mousemove={handleMousemove}
+  on:mouseleave={handleMouseleave}
+/>
+
+<!-- For screenreaders -->
+{#each xScale.ticks(timeDay.every(1)) as tick}
+  <rect
+    {height}
+    width={1}
+    on:focus={() => (hoveredDate = tick)}
+    x={xScale(tick)}
+    y={0}
+    fill="none"
+    pointer-events="none"
+  />
+{/each}
 
 <line
   x1={0}
@@ -20,4 +46,11 @@
   stroke="black"
   transform="translate({xScale(hoveredDate)} 0)"
   stroke-dasharray="2, 2"
+  pointer-events="none"
 />
+
+<style>
+  rect:focus-visible {
+    outline: none;
+  }
+</style>

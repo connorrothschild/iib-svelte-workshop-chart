@@ -14,7 +14,7 @@
     .y((d) => yScale(d.winprob));
 </script>
 
-<path d={lineGenerator(dataAfterHover)} stroke={fill} opacity=".5" />
+<path d={lineGenerator(dataAfterHover)} stroke={fill} opacity=".3" />
 <path d={lineGenerator(dataBeforeHover)} stroke={fill} />
 
 <style>
