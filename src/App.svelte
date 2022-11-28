@@ -33,7 +33,12 @@
 
 <!-- FIXME: Add aria-labelledby, title, etc. -->
 <div class="chart-container" bind:clientWidth={width}>
-  <svg {width} {height}>
+  <svg
+    {width}
+    {height}
+    aria-label="Dual line chart of Trump and Biden's likelihood of winning the 2020 presidential election"
+    aria-description="The line chart shows Trump and Biden's likelihoods diverging over time; at the latest date on the chart, Trump has a 10 in 100 chance and Biden has a 89 in 100 chance."
+  >
     <g class="inner-chart" transform="translate({margin.left}, {margin.top})">
       <!-- Axes -->
       <AxisX height={innerHeight} {xScale} {hoveredDate} />

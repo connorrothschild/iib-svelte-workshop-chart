@@ -25,11 +25,11 @@
   on:mouseleave={handleMouseleave}
 />
 
-<!-- For screenreaders -->
-{#each xScale.ticks(timeDay.every(1)) as tick}
+<!-- Optional: Add focusable ticks that can be tabbed into by keyboard users -->
+{#each focusableTicks as tick}
   <rect
     {height}
-    width={1}
+    width={width / focusableTicks.length}
     on:focus={() => (hoveredDate = tick)}
     x={xScale(tick)}
     y={0}
