@@ -1,62 +1,40 @@
 <script>
-  export let data;
-  export let hoveredDate;
-  export let xScale;
-  export let yScale;
-  export let BIDEN_COLOR;
-  export let TRUMP_COLOR;
+    export let xScale;
+    export let yScale;
+    export let hoveredDate;
+    export let data;
+    export let color;
 
-  $: getYValue = (data) =>
-    Math.round(data.filter((d) => new Date(d.date) >= hoveredDate)[0]?.winprob);
+    const getYValue = (date) =>
+        data.filter((d) => new Date(d.date) >= date)[0]?.winprob;
 </script>
 
-<!-- Text -->
+<circle
+    cx={xScale(hoveredDate)}
+    cy={yScale(getYValue(hoveredDate))}
+    r="7.5"
+    fill={color}
+    stroke="#f0f0f0"
+    pointer-events="none"
+/>
 <text
-  x={xScale(hoveredDate)}
-  y={yScale(getYValue(data.Trump))}
-  dx="8"
-  fill={TRUMP_COLOR}
+    x={xScale(hoveredDate)}
+    dx="12"
+    y={yScale(getYValue(hoveredDate))}
+    pointer-events="none"
+    fill={color}
+    stroke="#f0f0f0"
+    stroke-width="5"
+    paint-order="stroke"
 >
-  {getYValue(data.Trump)}
-  <tspan dy="1.1em" x={xScale(hoveredDate)} dx="8">in</tspan>
-  <tspan dy="1.1em" x={xScale(hoveredDate)} dx="8">100</tspan>
-</text>
-<text
-  x={xScale(hoveredDate)}
-  y={yScale(getYValue(data.Biden))}
-  dx="8"
-  fill={BIDEN_COLOR}
->
-  {getYValue(data.Biden)}
-  <tspan dy="1.1em" x={xScale(hoveredDate)} dx="8">in</tspan>
-  <tspan dy="1.1em" x={xScale(hoveredDate)} dx="8">100</tspan>
-</text>
+    {Math.round(getYValue(hoveredDate))}
 
-<!-- Circles -->
-<circle
-  cx={xScale(hoveredDate)}
-  cy={yScale(getYValue(data.Trump))}
-  r="5"
-  fill={TRUMP_COLOR}
-/>
-<circle
-  cx={xScale(hoveredDate)}
-  cy={yScale(getYValue(data.Biden))}
-  r="5"
-  fill={BIDEN_COLOR}
-/>
+    <tspan x={xScale(hoveredDate)} dx="12" dy="1.1em">in </tspan>
+    <tspan x={xScale(hoveredDate)} dx="12" dy="1.1em">100 </tspan>
+</text>
 
 <style>
-  text {
-    stroke: rgb(240, 240, 240);
-    stroke-width: 6;
-    paint-order: stroke;
-    pointer-events: none;
-    font-weight: 600;
-  }
-
-  circle {
-    stroke: rgb(240, 240, 240);
-    pointer-events: none;
-  }
+    text {
+        font-weight: 600;
+    }
 </style>

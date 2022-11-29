@@ -2,97 +2,120 @@
   import data from "./data/data.json";
   console.log(data);
 
+  const margin = { top: 30, right: 50, bottom: 30, left: 40 };
+
+  let height = 400;
   let width = 400;
-  const height = 400;
 
-  const margin = { top: 30, right: 50, bottom: 35, left: 50 };
+  let innerHeight = height - margin.top - margin.bottom;
+  $: innerWidth = width - margin.left - margin.right;
 
-  $: innerWidth = width - margin.right - margin.left;
-  const innerHeight = height - margin.top - margin.bottom;
-
-  import { scaleTime, scaleLinear } from "d3-scale";
-  const yScale = scaleLinear().domain([0, 100]).range([innerHeight, 0]);
-
-  import { extent } from "d3-array";
-  $: xScale = scaleTime()
-    .domain(extent(data.Trump.map((d) => new Date(d.date))))
-    .range([0, innerWidth]);
-
+  import { scaleLinear, scaleTime } from "d3-scale";
   import Line from "./lib/Line.svelte";
+
+  const yScale = scaleLinear()
+    .domain([0, 100]) // INPUT
+    .range([innerHeight, 0]); // OUTPUT
+
+  const minDate = new Date(data.Biden[0].date);
+  const maxDate = new Date(data.Biden[data.Biden.length - 1].date);
+
+  $: xScale = scaleTime()
+    .domain([minDate, maxDate]) // INPUT
+    .range([0, innerWidth]); // OUTPUT
 
   const BIDEN_COLOR = "#5768ac";
   const TRUMP_COLOR = "#fa5a50";
 
   import AxisX from "./lib/AxisX.svelte";
   import AxisY from "./lib/AxisY.svelte";
+  import HoverEvents from "./lib/HoverEvents.svelte";
   import Tooltip from "./lib/Tooltip.svelte";
-  import HoverListeners from "./lib/HoverListeners.svelte";
 
-  let hoveredDate = new Date(data.Trump[data.Trump.length - 1].date);
+  let hoveredDate = maxDate;
 </script>
 
-<!-- FIXME: Add aria-labelledby, title, etc. -->
-<div class="chart-container" bind:clientWidth={width}>
-  <svg
-    {width}
-    {height}
-    aria-label="Dual line chart of Trump and Biden's likelihood of winning the 2020 presidential election"
-    aria-description="The line chart shows Trump and Biden's likelihoods diverging over time; at the latest date on the chart, Trump has a 10 in 100 chance and Biden has a 89 in 100 chance."
-  >
-    <g class="inner-chart" transform="translate({margin.left}, {margin.top})">
-      <!-- Axes -->
-      <AxisX height={innerHeight} {xScale} {hoveredDate} />
-      <AxisY width={innerWidth} {yScale} />
+<div class="outer">
+  <div class="chart-container" bind:clientWidth={width}>
+    <h1>How the forecast has changed</h1>
+    <svg
+      {width}
+      {height}
+      aria-labelledby="chart-title"
+      aria-describedby="chart-description"
+      role="img"
+    >
+      <title id="chart-title">How the forecast has changed</title>
+      <desc id="chart-description"
+        >A dual line chart showing Donald Trump and Joe Biden's likelihood of
+        electoral victory diverging over time. At the final point, on November
+        3rd, Biden has an 89 in 100 chance of winning, and Trump has 10 in 100.</desc
+      >
+      <g transform="translate({margin.left} {margin.top})">
+        <AxisX
+          height={innerHeight}
+          {xScale}
+          {hoveredDate}
+          isUnhovered={hoveredDate === maxDate}
+        />
+        <AxisY width={innerWidth} {yScale} />
 
-      <!-- Lines -->
-      <Line
-        data={data.Trump}
-        {xScale}
-        {yScale}
-        fill={TRUMP_COLOR}
-        {hoveredDate}
-      />
-      <Line
-        data={data.Biden}
-        {xScale}
-        {yScale}
-        fill={BIDEN_COLOR}
-        {hoveredDate}
-      />
+        <Line
+          {xScale}
+          {yScale}
+          data={data.Biden}
+          color={BIDEN_COLOR}
+          {hoveredDate}
+        />
+        <Line
+          {xScale}
+          {yScale}
+          data={data.Trump}
+          color={TRUMP_COLOR}
+          {hoveredDate}
+        />
 
-      <!-- Hover Listeners -->
-      <HoverListeners
-        width={innerWidth}
-        height={innerHeight}
-        {xScale}
-        {margin}
-        bind:hoveredDate
-      />
+        <HoverEvents
+          width={innerWidth}
+          height={innerHeight}
+          {xScale}
+          {margin}
+          {maxDate}
+          bind:hoveredDate
+        />
 
-      <!-- Tooltip -->
-      <Tooltip
-        {data}
-        {hoveredDate}
-        {xScale}
-        {yScale}
-        {BIDEN_COLOR}
-        {TRUMP_COLOR}
-      />
-    </g>
-  </svg>
+        <Tooltip
+          {hoveredDate}
+          {xScale}
+          {yScale}
+          data={data.Biden}
+          color={BIDEN_COLOR}
+        />
+        <Tooltip
+          {hoveredDate}
+          {xScale}
+          {yScale}
+          data={data.Trump}
+          color={TRUMP_COLOR}
+        />
+      </g>
+    </svg>
+  </div>
 </div>
 
 <style>
-  :global(.axis text) {
-    fill: #999;
-    font-size: 0.8rem;
+  .outer {
+    padding: 15px;
+    background: #f0f0f0;
+    box-shadow: 2px 2px 6px 0 rgba(0, 0, 0, 0.15);
+    border-radius: 3px;
   }
-
-  .chart-container {
-    background: rgb(240, 240, 240);
-  }
-
-  svg {
-    cursor: crosshair;
+  h1 {
+    font-size: 28px;
+    line-height: 34px;
+    color: #222;
+    margin-bottom: 10px;
+    text-align: center;
+    font-weight: 600;
   }
 </style>
